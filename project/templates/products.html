@@ -1,13 +1,39 @@
 {% extends 'flatpages/default.html' %}
-<!--  наследуемся от шаблона default.html, который мы создавали для flatpages -->
 
-<!-- Название у нас будет products -->
 {% block title %}
 Products
 {% endblock title %}
 
-<!-- В контенте на странице мы выводим все товары -->
 {% block content %}
-<h1>Все товары</h1>
-{{ products }}
+   <h1>Все товары</h1>
+   <h3>{{ time_now|date:'M d Y' }}</h3>
+   <!-- Если в переменной next_sale будет None,
+   то выведется указанный в фильтре текст -->
+   <h3> {{ next_sale|default_if_none:"Чуть позже сообщим о распродаже!" }} </h3>
+
+   <hr>
+   {% if products %}
+       <table>
+           <tr>
+               <td>Название</td>
+               <td>Описание</td>
+               <td>Категория</td>
+               <td>Цена</td>
+               <td>Количество</td>
+           </tr>
+
+           {% for product in products %}
+           <tr>
+               <td>{{ product.name }}</td>
+               <td>{{ product.description|truncatewords:3 }}</td>
+               <td>{{ product.category.name }}</td>
+               <td>{{ product.price }}</td>
+               <td>{{ product.quantity }}</td>
+           </tr>
+           {% endfor %}
+
+       </table>
+   {% else %}
+       <h2>Товаров нет!</h2>
+   {% endif %}
 {% endblock content %}
