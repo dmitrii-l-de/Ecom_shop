@@ -1,7 +1,9 @@
 # Импортируем класс, который говорит нам о том,
 # что в этом представлении мы будем выводить список объектов из БД
 from django.shortcuts import render, HttpResponseRedirect
-from django.views.generic import ListView, DetailView
+from django.urls import reverse_lazy
+from django.views.generic import (ListView, DetailView, CreateView, UpdateView,
+                                  DeleteView)
 from .models import Product
 from .filters import ProductFilter
 from datetime import datetime
@@ -53,7 +55,6 @@ class ProductsList(ListView):
         return context
 
 
-
 class ProductDetail(DetailView):
     # Модель всё та же, но мы хотим получать информацию по отдельному товару
     model = Product
@@ -63,12 +64,35 @@ class ProductDetail(DetailView):
     context_object_name = 'product'
 
 
-def create_product(request):
-    form = ProductForm()
-    if request.method == 'POST':
-        form = ProductForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return HttpResponseRedirect('/products/')
+# def create_product(request):
+#     form = ProductForm()
+#     if request.method == 'POST':
+#         form = ProductForm(request.POST)
+#         if form.is_valid():
+#             form.save()
+#             return HttpResponseRedirect('/products/')
+#
+#     return render(request, 'product_edit.html', {'form': form})
 
-    return render(request, 'product_edit.html', {'form': form})
+# Добавляем новое представление для создания товаров. также можно использовать ф-ию как выше
+class ProductCreate(CreateView):
+    # Указываем нашу разработанную форму
+    form_class = ProductForm
+    # модель товаров
+    model = Product
+    # и новый шаблон, в котором используется форма.
+    template_name = 'product_edit.html'
+
+
+# Добавляем представление для изменения товара.
+class ProductUpdate(UpdateView):
+    form_class = ProductForm
+    model = Product
+    template_name = 'product_edit.html'
+
+
+# Представление удаляющее товар.
+class ProductDelete(DeleteView):
+    model = Product
+    template_name = 'product_delete.html'
+    success_url = reverse_lazy('product_list')

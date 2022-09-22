@@ -26,17 +26,9 @@ class Product(models.Model):
     def __str__(self):
         return f'{self.name.title()}: {self.description}'
 
+    def get_absolute_url(self):
+        return reverse('product_detail', args=[str(self.id)])
 
-class Material(models.Model):
-    name = models.CharField(max_length = 100)
-
-    def __str__(self):
-        return self.name
-
-
-class ProductMaterial(models.Model):
-    product = models.ForeignKey(Product, on_delete=models.CASCADE)
-    material = models.ForeignKey(Material, on_delete=models.CASCADE)
 
 # Категория, к которой будет привязываться товар
 class Category(models.Model):

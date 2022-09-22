@@ -1,5 +1,5 @@
 from django_filters import FilterSet, ModelChoiceFilter
-from .models import Product, Material
+from .models import Product
 
 # Создаем свой набор фильтров для модели Product.
 # FilterSet, который мы наследуем,
