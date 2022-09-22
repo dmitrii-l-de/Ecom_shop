@@ -17,5 +17,5 @@ def currency(value, code='rub'):
    code: код валюты
    """
    postfix = CURRENCIES_SYMBOLS[code]
-
    return f'{value} {postfix}'
+

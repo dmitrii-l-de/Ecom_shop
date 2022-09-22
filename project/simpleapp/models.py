@@ -1,5 +1,6 @@
 from django.db import models
 from django.core.validators import MinValueValidator
+from django.urls import reverse
 
 
 # Товар для нашей витрины
@@ -23,8 +24,19 @@ class Product(models.Model):
     )
 
     def __str__(self):
-        return f'{self.name.title()}: {self.description[:20]}'
+        return f'{self.name.title()}: {self.description}'
 
+
+class Material(models.Model):
+    name = models.CharField(max_length = 100)
+
+    def __str__(self):
+        return self.name
+
+
+class ProductMaterial(models.Model):
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    material = models.ForeignKey(Material, on_delete=models.CASCADE)
 
 # Категория, к которой будет привязываться товар
 class Category(models.Model):
